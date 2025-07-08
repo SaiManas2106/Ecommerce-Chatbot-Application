@@ -1,7 +1,13 @@
-// src/components/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
+// Use environment variable or fallback to Render backend URL
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://ecommerce-chatbot-application.onrender.com";
+
+// Always send session cookies
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -11,14 +17,16 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://ecommerce-chatbot-application.onrender.com/api/login", {
-        username,
-        password,
-      },{withCredentials:true});
+      const res = await axios.post(
+        `${API_BASE_URL}/api/login`,
+        { username, password },
+        { withCredentials: true }
+      );
       localStorage.setItem("token", res.data.token);
       navigate("/chat");
     } catch (err) {
       alert("Invalid credentials");
+      console.error(err);
     }
   };
 
