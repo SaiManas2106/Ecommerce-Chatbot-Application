@@ -3,6 +3,13 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "../App.css";
 
+// Use env variable for backend URL or fallback
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://ecommerce-chatbot-application.onrender.com";
+
+// Always send cookies/session info
+axios.defaults.withCredentials = true;
+
 const Register = () => {
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
@@ -14,11 +21,9 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "https://ecommerce-chatbot-application.onrender.com/api/register",
-        form,
-        { withCredentials: true } // ✅ important for session cookies
-      );
+      await axios.post(`${API_BASE_URL}/api/register`, form, {
+        withCredentials: true,
+      });
       alert("Registered successfully. Please login.");
       navigate("/login");
     } catch (err) {
