@@ -14,7 +14,11 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://ecommerce-chatbot-application.onrender.com/api/register", form);
+      await axios.post(
+        "https://ecommerce-chatbot-application.onrender.com/api/register",
+        form,
+        { withCredentials: true } // ✅ important for session cookies
+      );
       alert("Registered successfully. Please login.");
       navigate("/login");
     } catch (err) {
