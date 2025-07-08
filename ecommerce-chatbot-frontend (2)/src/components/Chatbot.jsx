@@ -35,7 +35,7 @@ const Chatbot = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/chat/log",
+        "https://ecommerce-chatbot-application.onrender.com/api/chat/log",
         {
           sender: "user",
           message: input,
@@ -45,7 +45,7 @@ const Chatbot = () => {
       );
 
       const res = await axios.post(
-        "http://localhost:5000/api/chat/bot",
+        "https://ecommerce-chatbot-application.onrender.com/api/chat/bot",
         { message: input },
         { withCredentials: true }
       );
@@ -72,7 +72,7 @@ const Chatbot = () => {
 
       // Log bot response
       await axios.post(
-        "http://localhost:5000/api/chat/log",
+        "https://ecommerce-chatbot-application.onrender.com/api/chat/log",
         {
           sender: "bot",
           message: botReply,
@@ -95,7 +95,7 @@ const Chatbot = () => {
 
   const fetchChatHistory = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/chat/logs", {
+      const res = await axios.get("https://ecommerce-chatbot-application.onrender.com/api/chat/logs", {
         withCredentials: true,
       });
       if (res.data && res.data.length > 0) {
@@ -118,7 +118,7 @@ const Chatbot = () => {
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:5000/api/logout", {}, { withCredentials: true })
+      .post("https://ecommerce-chatbot-application.onrender.com/api/logout", {}, { withCredentials: true })
       .finally(() => navigate("/login"));
   };
 
