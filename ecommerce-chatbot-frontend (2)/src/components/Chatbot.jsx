@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../App.css";
 
+// Use environment variable for backend URL (fallback to Render link)
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "https://ecommerce-chatbot-application.onrender.com";
+
 // Ensure credentials (cookies/session) are sent
 axios.defaults.withCredentials = true;
 
@@ -25,7 +29,6 @@ const Chatbot = () => {
 
     const timestamp = new Date().toISOString();
 
-    // Add user message to UI and log it
     const userMessage = {
       role: "user",
       text: input,
@@ -35,7 +38,7 @@ const Chatbot = () => {
 
     try {
       await axios.post(
-        "https://ecommerce-chatbot-application.onrender.com/api/chat/log",
+        `${API_BASE_URL}/api/chat/log`,
         {
           sender: "user",
           message: input,
@@ -45,7 +48,7 @@ const Chatbot = () => {
       );
 
       const res = await axios.post(
-        "https://ecommerce-chatbot-application.onrender.com/api/chat/bot",
+        `${API_BASE_URL}/api/chat/bot`,
         { message: input },
         { withCredentials: true }
       );
@@ -70,9 +73,8 @@ const Chatbot = () => {
       };
       setChat((prev) => [...prev, botMessage]);
 
-      // Log bot response
       await axios.post(
-        "https://ecommerce-chatbot-application.onrender.com/api/chat/log",
+        `${API_BASE_URL}/api/chat/log`,
         {
           sender: "bot",
           message: botReply,
@@ -95,7 +97,7 @@ const Chatbot = () => {
 
   const fetchChatHistory = async () => {
     try {
-      const res = await axios.get("https://ecommerce-chatbot-application.onrender.com/api/chat/logs", {
+      const res = await axios.get(`${API_BASE_URL}/api/chat/logs`, {
         withCredentials: true,
       });
       if (res.data && res.data.length > 0) {
@@ -118,7 +120,7 @@ const Chatbot = () => {
 
   const handleLogout = () => {
     axios
-      .post("https://ecommerce-chatbot-application.onrender.com/api/logout", {}, { withCredentials: true })
+      .post(`${API_BASE_URL}/api/logout`, {}, { withCredentials: true })
       .finally(() => navigate("/login"));
   };
 
@@ -131,7 +133,9 @@ const Chatbot = () => {
             <div key={idx} className={`message ${msg.role}`}>
               <span className="timestamp">[{msg.timestamp}]</span>{" "}
               <strong>{msg.role === "user" ? "You" : "Bot"}:</strong>{" "}
-              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>{msg.text}</pre>
+              <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
+                {msg.text}
+              </pre>
             </div>
           ))}
           <div ref={chatEndRef} />
