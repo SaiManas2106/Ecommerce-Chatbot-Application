@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import Migrate
 from .extensions import db, login_manager
 from .models import User
 from app.routes.auth import bp as auth_bp
@@ -12,6 +13,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ecommerce.db"
 
     db.init_app(app)
+    migrate = Migrate(app, db)
     login_manager.init_app(app)
     CORS(app, supports_credentials=True, origins=["https://ecommerce-chatbot-application.vercel.app"])
 
