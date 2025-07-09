@@ -6,3 +6,4 @@ Faker
 PyJWT
 Werkzeug
 gunicorn
+Flask-Migrate
